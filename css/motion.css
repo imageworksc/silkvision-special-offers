@@ -1,0 +1,73 @@
+/* ==========================================================================
+   Motion — the hero's entrance, scroll reveals, and the reduced-motion
+   contract
+   ==========================================================================
+   Loaded last so it can switch everything above off in one place. The
+   reward graphics' own entrances live with them in sections.css.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Hero entrance
+   The title, line and button come in as one gesture, the same move as the
+   EVO cards: a short rise and fade on one long ease-out, with no blur and no
+   overshoot, each a beat behind the last so it reads as one motion. The
+   index rides in the attribute rather than an inline style, so the markup
+   carries no style of its own.
+   -------------------------------------------------------------------------- */
+
+@keyframes hero-lux {
+  from { opacity: 0; transform: translateY(1.6rem); }
+  to   { opacity: 1; transform: none; }
+}
+#sv-main .hero [data-seq] { animation: hero-lux 1.3s var(--ease-lux) backwards; }
+#sv-main .hero [data-seq="0"] { animation-delay: .1s; }
+#sv-main .hero [data-seq="1"] { animation-delay: .18s; }
+#sv-main .hero [data-seq="2"] { animation-delay: .26s; }
+
+/* --------------------------------------------------------------------------
+   Scroll reveals
+   The flag goes on <html> from script, so nothing is ever left hidden when
+   the script does not run.
+   -------------------------------------------------------------------------- */
+
+[data-anim="on"] [data-reveal] {
+  opacity: 0;
+  transform: translateY(2.4rem);
+  transition: opacity var(--t-slow) var(--ease),
+              transform var(--t-slow) var(--ease);
+}
+[data-anim="on"] [data-reveal].is-in { opacity: 1; transform: none; }
+
+/* --------------------------------------------------------------------------
+   Reduced motion
+   Everything above goes. Colour and tint changes stay, because they carry
+   state — only travel is removed, and nothing is allowed to end on a frame
+   that hides content.
+   -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+
+  [data-anim="on"] [data-reveal] { opacity: 1; transform: none; }
+
+  /* The blanket rule above only zeroes the hovered element's own move, so
+     the arrow inside a button is named here. */
+  .btn:hover,
+  .btn:hover .ico--arrow { transform: none; }
+
+  /* The EVO reward cards appear in place, already tilted, with no shine. */
+  [data-anim="on"] .reward-graphic .gift { opacity: 1; transform: rotate(var(--rot)); filter: none; transition: none; }
+  [data-anim="on"] .reward-graphic.is-live .gift::after { animation: none; opacity: 0; }
+
+  /* The LASIK card appears at its resting tilt: no wiggle, no sparks. */
+  [data-anim="on"] .lasik-graphic .gift--lasik,
+  [data-anim="on"] .lasik-graphic.is-live .gift--lasik { opacity: 1; transform: rotate(var(--rot)); filter: none; animation: none; }
+  [data-anim="on"] .lasik-graphic.is-live .spark { animation: none; opacity: 0; }
+  [data-anim="on"] .lasik-graphic.is-live .gift__knot { animation: none; }
+}

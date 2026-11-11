@@ -1,0 +1,588 @@
+/* ==========================================================================
+   Sections — the special offers page
+   Light hero → EVO ICL on navy → LASIK on the blue tint → navy closing.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Hero
+   The office-based surgery page's construction: the photograph as the
+   background, one flat navy scrim over all of it, the copy on top. The
+   scrim is the shared --fill-scrim (.78). Its worst case does not depend
+   on the photograph: over a pure-white pixel it leaves white type at 8.1:1
+   and the 80%-white intro at 5.9:1, the same figures as that page.
+
+   Slimmer than that page's hero: no minimum height, just the band's own
+   padding around four lines of copy and the buttons.
+   -------------------------------------------------------------------------- */
+
+.hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding-block: var(--s-9);
+  /* HERO_IMAGE — [PENDING: upload specials_hero.jpg to Cloudinary and swap
+     this path for its f_auto,q_auto,w_1800 URL.] Positioned so the three
+     faces on the right stay in frame; the copy sits over the left. */
+  background: var(--ink-800) url('../images/specials-hero.jpg') 62% 34% / cover no-repeat;
+  overflow: hidden;
+  isolation: isolate;
+}
+@media (min-width: 60rem) { .hero { padding-block: var(--s-10); } }
+
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--fill-scrim);
+}
+
+/* A step down from --t-h1 (32 → 62) and from 800 to 700: across the full
+   shell the 62px line read as a banner rather than a title. Capped in em so
+   "Special Offers & Patient Referral Rewards" sets in two even lines; the
+   floor is 34px so on phones it still leads the 28px section titles. */
+#sv-main .hero h1 {
+  color: var(--white);
+  max-width: 17em;
+  font-size: clamp(3.4rem, 2.4vw + 1.2rem, 4.4rem);   /* 34 → 44 */
+  font-weight: 700;
+}
+.hero .lead { color: var(--pale-200); max-width: none; }
+.hero .hero__lead { max-width: 56ch; }
+
+/* --------------------------------------------------------------------------
+   Section heads — a heading and the paragraph under it
+   -------------------------------------------------------------------------- */
+
+.head { gap: var(--s-4); }
+.head .lead { max-width: 52ch; }
+
+/* Running copy in a column: paragraphs spaced. */
+.prose { display: grid; gap: var(--s-4); }
+.prose p { color: var(--text-soft); }
+.prose strong { color: var(--heading); font-weight: 600; }
+
+/* On the navy bands the lead and the running copy both step up a tone.
+   --text-soft re-points to 62% white there, which is right for a label and
+   too faint for a paragraph somebody past sixty has to read. */
+.band--deep .lead { color: var(--pale-200); }
+.band--deep .prose p { color: var(--on-dark-soft); }
+.band--deep p { color: var(--on-dark-soft); }
+
+/* --------------------------------------------------------------------------
+   Section titles — two lines when long
+   --------------------------------------------------------------------------
+   From 48rem a section title is held to 60% of the content width. One that
+   is longer than that breaks — and text-wrap: balance splits it into two
+   even lines rather than a long line and a stub. Short titles are
+   untouched. Titles set in a column of their own already sit inside it.
+   -------------------------------------------------------------------------- */
+
+@media (min-width: 48rem) {
+  #sv-main h2 {
+    max-inline-size: calc((min(100vw, var(--shell)) - var(--gutter) * 2) * .6);
+    text-wrap: balance;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Phones — buttons keep their label on one line
+   Less padding and no wrapping, so a label never breaks inside a full-width
+   button and shoves its arrow against the edge.
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 47.99rem) {
+  .btn { padding-inline: var(--s-4); gap: var(--s-2); white-space: nowrap; letter-spacing: 0; }
+  .sticky-cta { grid-template-columns: 3fr 2fr; }
+  .sticky-cta a { white-space: nowrap; }
+}
+
+/* ==========================================================================
+   Large screens — the page grows with the screen past 1920
+   ==========================================================================
+   Every measure on the page is in rem, so letting the root size follow the
+   viewport past 120rem scales the whole layout as one: a 4K or 5K screen at
+   1x sees the 1920 page, larger and sharper, instead of a 1248px column
+   floating in a field of white. max() keeps a reader's own larger default. */
+
+@media (min-width: 120rem) {
+  html { font-size: max(62.5%, 100vw / 192); }
+  /* HERO_IMAGE — [PENDING: the same Cloudinary photo at c_limit,w_3600.] */
+}
+
+/* ==========================================================================
+   The offers
+   Each offer is its own section on its own ground.
+   ========================================================================== */
+
+:root {
+  /* Muted steel blue for the LASIK card's bow and its label. The lightest
+     step of this tone that still clears 4.5:1 on the card's navy, so the
+     label passes at any size. */
+  --gift-steel: #7fa3bb;
+
+  /* Light blue ground. --pale-100 and --paper read grey at section scale,
+     and grey reads as disabled; this is brand blue's hue near white. */
+  --fill-blue: #e8f2fb;
+}
+
+.band--blue { background: var(--fill-blue); }
+
+/* Offer titles: one step under the shared h2 so they hold two lines. */
+.offer h2 { font-size: clamp(2.8rem, 1.2vw + 1.76rem, 3.6rem); }   /* 28 → 36 */
+.offer .head { gap: var(--s-3); }
+.offer .prose p { color: var(--text-soft); }
+
+/* --------------------------------------------------------------------------
+   EVO ICL — navy. The story on the left, the reward graphic on the right,
+   and the how-it-works card across both under them.
+   -------------------------------------------------------------------------- */
+#sv-main .offer--evo .subhead { color: var(--cyan-300); }
+/* Bold. Specific enough to outrank type.css, which loads later and resets
+   every subhead to 400. */
+#sv-main .offer--evo .head p.subhead,
+#sv-main .offer--lasik .head p.subhead { font-weight: 600; }
+.offer--evo .prose p { color: var(--on-dark-soft); }
+
+.evo-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: "intro" "img" "card";
+  gap: var(--s-7);
+}
+.evo-intro { grid-area: intro; }
+.reward-graphic { grid-area: img; }
+.evo-card { grid-area: card; }
+@media (min-width: 60rem) {
+  .evo-layout {
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    grid-template-areas: "intro img" "card card";
+    column-gap: var(--s-10);
+    /* A clear pause between the offer and how it works. */
+    row-gap: var(--s-10);
+  }
+}
+
+/* The how-it-works card: a recessed plate in the band's darkest navy, edged
+   with a fine light hairline. Darker than the ground rather than lighter, so
+   it reads as set into the section, not pasted onto it. */
+.evo-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--s-4);
+  padding: var(--s-8);
+  background: var(--ink-800);
+  border: 1px solid rgb(255 255 255 / .12);
+  border-radius: var(--r-lg);
+}
+@media (max-width: 47.99rem) {
+  .evo-card { padding: var(--s-6) var(--s-4); }
+  .evo-card .btn { inline-size: 100%; padding-inline: var(--s-4); }
+}
+/* A larger floor on phones (24px, from 21) so it still reads as a title. */
+.band--deep .evo-card h3 { font-size: clamp(2.34rem, .72vw + 1.728rem, 2.7rem); color: var(--white); }
+.evo-card p { color: var(--on-dark-soft); max-width: 68ch; }
+.evo-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-2) var(--s-6);
+  margin-block-start: var(--s-3);
+}
+
+/* The terms belong to the how-it-works card: fine print at its foot, at the
+   floor size (16px) in a quieter tone than the answer above, with nothing
+   in bold, so they read as the program's small print, not as more copy.
+   Specific enough to outrank the body-copy size and the card's own
+   paragraph colour. */
+#sv-main .offer--evo .evo-card p.evo-terms {
+  /* Two lines on desktop, ending near the answer's right edge above it:
+     52rem is the narrowest width that still holds the terms to two lines. */
+  max-width: 83.2rem;
+  /* Set apart from the actions above it as the card's small print. */
+  margin-block-start: var(--s-6);
+  font-size: 1.6rem;
+  line-height: 1.6;
+  color: rgb(255 255 255 / .55);
+}
+
+/* --------------------------------------------------------------------------
+   LASIK — blue tint. The gift card left, the offer right.
+   -------------------------------------------------------------------------- */
+.lasik-layout { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s-7); }
+@media (min-width: 60rem) {
+  .lasik-layout { grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); align-items: center; gap: var(--s-10); }
+}
+.lasik-body { gap: var(--s-5); max-width: 57.6rem; }
+.lasik-body > p { color: var(--text-soft); }
+.lasik-body .btn { margin-block-start: var(--s-2); }
+
+/* --------------------------------------------------------------------------
+   The reward graphic — two gift cards. "For you" sits behind, a darker step
+   of the navy; "for a friend" sits in front in light cyan, because it is the
+   larger reward and the reason to refer. Card proportions (1.586:1), a slight
+   opposing tilt, nothing else: no icons, no badges, no gradient.
+   -------------------------------------------------------------------------- */
+.reward-graphic {
+  position: relative;
+  margin: 0;
+  min-block-size: 28.8rem;
+  container-type: inline-size;
+}
+/* Desktop: the graphic takes exactly the intro's height and the cards size
+   from that height, so the pair always spans the H2's top to the last
+   paragraph's last line, whatever the copy wraps to. */
+@media (min-width: 60rem) {
+  .reward-graphic { align-self: stretch; min-block-size: 27.2rem; }
+  .reward-graphic .gift { inline-size: auto; }
+  .reward-graphic .gift--you    { block-size: 60%; }
+  .reward-graphic .gift--friend { block-size: 72%; }
+}
+
+.gift {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  aspect-ratio: 1.586;
+  padding: 9cqi;
+  border-radius: var(--r-lg);
+  /* Each card is its own size container, so its type and padding scale with
+     the card, not with the column. */
+  container-type: inline-size;
+  overflow: hidden;
+  isolation: isolate;
+  transform: rotate(var(--rot));
+}
+.gift--you {
+  --rot: -6deg;
+  --ribbon: rgb(255 255 255 / .1);
+  inset-block-start: 3%;
+  inset-inline-start: 0;
+  inline-size: 60%;
+  background: var(--ink-600);
+  border: 1px solid rgb(255 255 255 / .14);
+  color: var(--white);
+  box-shadow: 0 1.6rem 3.2rem rgb(0 19 37 / .3);
+}
+.gift--friend {
+  --rot: 3deg;
+  --ribbon: var(--cyan-300);
+  inset-block-end: 3%;
+  inset-inline-end: 0;
+  inline-size: 72%;
+  background: var(--fill-blue);
+  color: var(--ink-700);
+  box-shadow: 0 2.8rem 5.6rem rgb(0 19 37 / .5), 0 .4rem 1.2rem rgb(0 19 37 / .2);
+}
+
+#sv-main .gift__amt {
+  display: flex;
+  align-items: flex-start;
+  font-family: var(--font);
+  font-weight: 700;
+  font-size: 25cqi;
+  line-height: .9;
+  letter-spacing: -.02em;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+/* The currency sign set small and high, as on printed card faces, so the
+   figure carries the weight. */
+#sv-main .gift__cur {
+  font-size: .45em;
+  font-weight: 600;
+  line-height: 1;
+  margin-block-start: .2em;
+  margin-inline-end: .06em;
+}
+#sv-main .gift__who {
+  font-family: var(--font);
+  font-weight: 600;
+  font-size: max(1.6rem, 7cqi);
+  line-height: var(--lh-head);
+}
+.gift--you .gift__who { color: var(--pale-200); }
+.gift--friend .gift__who { color: var(--blue-500); }
+
+/* Entrance, each time the section comes into view: both cards rise and come
+   into focus together on one long ease-out, then a soft band of light passes
+   across each face once, the way light catches a printed card. The band is a
+   flat translucent white softened by blur, not a gradient. Only when the
+   script has switched animation on. */
+:root { --ease-lux: cubic-bezier(.16, 1, .3, 1); }
+
+[data-anim="on"] .reward-graphic .gift {
+  opacity: 0;
+  transform: translateY(2.4rem) rotate(0deg) scale(.97);
+  filter: blur(6px);
+  transition:
+    opacity .9s var(--ease-lux),
+    transform 1.3s var(--ease-lux),
+    filter 1s var(--ease-lux);
+}
+[data-anim="on"] .reward-graphic.is-live .gift {
+  opacity: 1;
+  transform: rotate(var(--rot));
+  filter: none;
+}
+
+.reward-graphic .gift::after {
+  content: '';
+  position: absolute;
+  inset-block: -25%;
+  inset-inline-start: 0;
+  inline-size: 18%;
+  background: var(--shine);
+  filter: blur(10px);
+  transform: translateX(-180%) skewX(-18deg);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+/* The light passes over the card face, under its type. */
+.reward-graphic .gift > * { position: relative; z-index: 1; }
+.gift--you    { --shine: rgb(255 255 255 / .14); }
+.gift--friend { --shine: rgb(255 255 255 / .75); }
+[data-anim="on"] .reward-graphic.is-live.is-shine .gift::after {
+  /* Waits for the cards to settle; shorter when the hero button brings the
+     visitor here (set by main.js). */
+  animation: card-shine 1.6s cubic-bezier(.45, 0, .2, 1) var(--shine-delay, .9s) both;
+}
+@keyframes card-shine {
+  0%   { opacity: 0; transform: translateX(-180%) skewX(-18deg); }
+  15%  { opacity: 1; }
+  85%  { opacity: 1; }
+  100% { opacity: 0; transform: translateX(640%) skewX(-18deg); }
+}
+
+/* --------------------------------------------------------------------------
+   The LASIK graphic — one $50 gift card, the same card language as the EVO
+   pair, in navy for the light ground. On first view it rises into place,
+   tips into a small celebratory tilt while four cyan sparks burst from its
+   corners (short strokes that shrink to dots as they travel out and fade),
+   rocks back, and settles at a slight angle. Plays once.
+   -------------------------------------------------------------------------- */
+.lasik-graphic {
+  position: relative;
+  display: grid;
+  place-items: center;
+  margin: 0;
+  min-block-size: 25.6rem;
+  padding: var(--s-7) var(--s-5);
+}
+@media (min-width: 60rem) { .lasik-graphic { align-self: stretch; } }
+
+.lasik-card {
+  position: relative;
+  inline-size: min(80%, 38.4rem);
+  aspect-ratio: 1.586;
+}
+
+.gift.gift--lasik {
+  --rot: -3deg;
+  inset: 0;
+  inline-size: auto;
+  padding: clamp(2rem, 2.4vw, 3.2rem);
+  background: var(--ink-700);
+  color: var(--white);
+  box-shadow: 0 2.8rem 5.6rem rgb(1 53 89 / .35), 0 .4rem 1.2rem rgb(1 53 89 / .18);
+}
+#sv-main .gift--lasik .gift__amt { font-size: clamp(4.8rem, 5.5vw, 7.2rem); }
+#sv-main .gift--lasik .gift__who { font-size: clamp(1.6rem, 1.5vw, 2rem); color: var(--gift-steel); }
+
+/* Ribbon and bow: quiet strokes, a muted silver-blue (the pale tint at
+   low strength) so they read as a detail, not an accent. Round caps,
+   behind the card's type. */
+.gift__bow {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  z-index: 0;
+  overflow: visible;
+  fill: none;
+  /* Solid, not translucent: overlapping strokes would stack into bright
+     spots where the ribbon crosses and the loops meet. */
+  stroke: var(--gift-steel);
+  stroke-width: 9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.gift--lasik .gift__amt,
+.gift--lasik .gift__who { position: relative; z-index: 1; }
+.gift__knot { transform-box: fill-box; transform-origin: 50% 70%; }
+
+/* Sparks: one at each corner, pointing diagonally out. Hidden until the
+   burst; never shown without animation. */
+.spark {
+  position: absolute;
+  inline-size: .8rem;
+  block-size: 3.6rem;
+  border-radius: 1.6rem;
+  background: var(--cyan-400);
+  opacity: 0;
+  pointer-events: none;
+}
+.spark--tl { inset-block-start: -2.8rem; inset-inline-start: -2rem; --a: -45deg; }
+.spark--tr { inset-block-start: -2.8rem; inset-inline-end: -2rem;   --a: 45deg; }
+.spark--bl { inset-block-end: -2.8rem;   inset-inline-start: -2rem; --a: -135deg; }
+.spark--br { inset-block-end: -2.8rem;   inset-inline-end: -2rem;   --a: 135deg; }
+
+/* Entrance, once. */
+[data-anim="on"] .lasik-graphic .gift--lasik { opacity: 0; }
+[data-anim="on"] .lasik-graphic.is-live .gift--lasik {
+  animation: lasik-card 2s cubic-bezier(.33, 1, .68, 1) both;
+}
+/* The bow pops as the sparks burst. */
+[data-anim="on"] .lasik-graphic.is-live .gift__knot {
+  animation: lasik-bow .8s cubic-bezier(.33, 1, .68, 1) 1s both;
+}
+@keyframes lasik-bow {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.18); }
+  70%  { transform: scale(.96); }
+  100% { transform: scale(1); }
+}
+[data-anim="on"] .lasik-graphic.is-live .spark {
+  animation: lasik-spark .95s cubic-bezier(.22, 1, .36, 1) 1s both;
+}
+
+@keyframes lasik-card {
+  0%   { opacity: 0; transform: translateY(3.2rem) scale(.96); filter: blur(6px); }
+  38%  { opacity: 1; transform: none; filter: none; }
+  54%  { transform: rotate(-7deg) scale(1.03); }
+  70%  { transform: rotate(2deg) scale(1); }
+  85%  { transform: rotate(-4.5deg); }
+  100% { opacity: 1; transform: rotate(var(--rot)); }
+}
+/* Each spark grows as a stroke, then shrinks to a dot as it travels out
+   along its own diagonal, and fades. */
+@keyframes lasik-spark {
+  0%   { opacity: 0; transform: rotate(var(--a)) translateY(.8rem) scaleY(.2); }
+  30%  { opacity: 1; transform: rotate(var(--a)) translateY(-.4rem) scaleY(1); }
+  65%  { opacity: 1; transform: rotate(var(--a)) translateY(-2.8rem) scaleY(.22); }
+  100% { opacity: 0; transform: rotate(var(--a)) translateY(-4.4rem) scaleY(.22); }
+}
+
+/* --------------------------------------------------------------------------
+   Closing call. The title sits at the offers' title size on one line rather
+   than breaking into two oversized lines, and the line under it is held to
+   a reading measure.
+   -------------------------------------------------------------------------- */
+#sv-main .closing h2 {
+  max-inline-size: none;
+  font-size: clamp(2.8rem, 1.2vw + 1.76rem, 3.6rem);
+}
+#sv-main .closing .lead { max-width: 58ch; }
+.closing .cluster { justify-content: center; }
+
+/* Phones and tablets: the EVO reward cards a size smaller, so the pair reads
+   as a graphic beside the copy rather than a second hero. */
+@media (max-width: 59.99rem) {
+  .reward-graphic { min-block-size: 21.6rem; max-inline-size: 41.6rem; }
+  .gift--you    { inline-size: 54%; }
+  .gift--friend { inline-size: 64%; }
+}
+/* Tablets: the column is wider than the pair's 416px cap, so the pair is
+   centred in it rather than leaving the right half of the band empty. */
+@media (min-width: 30rem) and (max-width: 59.99rem) {
+  .reward-graphic { inline-size: 100%; margin-inline: auto; }
+}
+
+/* --------------------------------------------------------------------------
+   How-it-works card with an image. Desktop: the answer, button and link in a
+   narrower column on the left, the image on the right at the same height;
+   the terms run under both, still two lines. Phones: image first, then the
+   text, then the terms.
+   -------------------------------------------------------------------------- */
+.evo-card {
+  grid-template-areas: "img" "text" "terms";
+}
+.evo-card__text { grid-area: text; display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s-4); }
+.evo-card__img  { grid-area: img; }
+.evo-card .evo-terms { grid-area: terms; }
+
+.evo-card__img {
+  display: grid;
+  place-items: center;
+  margin: 0;
+  min-block-size: 19.2rem;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: var(--r-md);
+  background: var(--ink-700);
+  border: 1px solid rgb(255 255 255 / .1);
+}
+.evo-card__img img { inline-size: 100%; block-size: 100%; object-fit: cover; object-position: 62% 62%; }
+
+@media (min-width: 60rem) {
+  .evo-card {
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    grid-template-areas: "text img" "terms terms";
+    column-gap: var(--s-9);
+    align-items: stretch;
+  }
+  .evo-card__img { aspect-ratio: auto; min-block-size: 100%; }
+}
+
+/* Full-bleed card: the image takes the card's whole left side, flush to
+   its top, bottom and left edges with the card's corners clipping it; the
+   text and the terms sit in the right column. Phones: the image runs flush
+   across the card's top. */
+.evo-card--bleed { padding: 0; overflow: hidden; grid-template-columns: minmax(0, 1fr); grid-template-areas: "img" "text" "terms"; }
+.evo-card--bleed .evo-card__img { border: 0; border-radius: 0; aspect-ratio: 16 / 10; min-block-size: 0; }
+.evo-card--bleed .evo-card__text { padding: var(--s-6) var(--s-4) 0; }
+#sv-main .offer--evo .evo-card--bleed p.evo-terms { padding: 0 var(--s-4) var(--s-6); margin-block-start: var(--s-4); }
+@media (min-width: 48rem) {
+  .evo-card--bleed .evo-card__text { padding: var(--s-8) var(--s-8) 0; }
+  #sv-main .offer--evo .evo-card--bleed p.evo-terms { padding: 0 var(--s-8) var(--s-8); }
+}
+@media (min-width: 60rem) {
+  .evo-card--bleed {
+    grid-template-columns: minmax(0, .9fr) minmax(0, 1.25fr);
+    grid-template-areas: "img text" "img terms";
+    grid-template-rows: 1fr auto;
+    column-gap: 0;
+    row-gap: 0;
+  }
+  .evo-card--bleed .evo-card__img { aspect-ratio: auto; min-block-size: 100%; }
+  .evo-card--bleed .evo-card__text { padding: var(--s-9) var(--s-9) 0; align-content: center; }
+  #sv-main .offer--evo .evo-card--bleed p.evo-terms { padding: 0 var(--s-9) var(--s-9); margin-block-start: var(--s-6); }
+}
+
+/* Chosen layout (was Version C): as the full-bleed card, with the image
+   flush to the card's right side and the text on the page's left edge. */
+@media (min-width: 60rem) {
+  .evo-card--bleed.evo-card--bleed-end {
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, .9fr);
+    grid-template-areas: "text img" "terms img";
+  }
+}
+
+/* The card's two actions as the guide's button pair — solid for the primary,
+   outlined for the secondary — stacked at one shared width (the longer
+   label's) so they read as a set, with their labels and arrows lined up.
+   Phones: both full width. */
+.evo-card .evo-card__actions {
+  display: grid;
+  grid-template-columns: max-content;
+  justify-content: start;
+  gap: var(--s-3);
+}
+.evo-card .evo-card__actions .btn { justify-content: space-between; gap: var(--s-5); }
+@media (max-width: 47.99rem) {
+  .evo-card .evo-card__actions { grid-template-columns: minmax(0, 1fr); }
+  /* The labels fill a phone-width button, so the arrows go and the labels
+     centre, rather than an arrow being pushed past the edge. */
+  .evo-card .evo-card__actions .btn { justify-content: center; }
+  .evo-card .evo-card__actions .btn .ico--arrow { display: none; }
+  /* The two labels are the page's longest. On the narrowest phones (320)
+     they do not fit one line, and the shared nowrap clipped both ends, so
+     here they may wrap to two balanced lines, padded off the button's
+     edges. From 375 up they still set on one line. */
+  .evo-card .evo-card__actions .btn {
+    white-space: normal;
+    text-align: center;
+    padding-block: var(--s-3);
+  }
+}

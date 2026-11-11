@@ -1,0 +1,141 @@
+/* ==========================================================================
+   Components — icons, buttons, reading progress, sticky call bar
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Icons
+   Original line drawings, 24×24, 1.8 stroke in currentColor, so every icon
+   takes the colour of whatever it sits in.
+   -------------------------------------------------------------------------- */
+
+.ico {
+  inline-size: 1.375em;
+  block-size: 1.375em;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* --------------------------------------------------------------------------
+   Buttons
+   --r-md, not --r-pill. A fully rounded button is the default of every page
+   builder and every generated layout, and at 64px tall it was reading as one.
+   10px is off the pill and still soft.
+   -------------------------------------------------------------------------- */
+
+.btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s-3);
+  min-block-size: 5.6rem;
+  min-inline-size: var(--tap);
+  padding-inline: var(--s-7);
+  border: 2px solid transparent;
+  border-radius: var(--r-md);
+  font: inherit;
+  font-size: var(--t-sm);
+  font-weight: 700;
+  letter-spacing: .01em;
+  /* Not 1. Most buttons here are one line and min-block-size sets their
+     height anyway, but the EVO card's two labels wrap on a 320px phone, and
+     at a leading of 1 the two lines touch. */
+  line-height: 1.25;
+  text-wrap: balance;
+  text-decoration: none;
+  cursor: pointer;
+  overflow: hidden;
+  isolation: isolate;
+  transition: transform var(--t-fast) var(--ease),
+              background-color var(--t-fast) var(--ease),
+              border-color var(--t-fast) var(--ease),
+              color var(--t-fast) var(--ease);
+}
+.btn--lg { min-block-size: 6.4rem; padding-inline: var(--s-8); font-size: var(--t-body); }
+
+.btn:hover { transform: translateY(-3px); }
+.btn:active { transform: translateY(-1px); }
+
+/* Flat: no plum glow, at rest or on hover. */
+.btn--solid {
+  background: var(--fill-action);
+  color: var(--white);
+}
+
+.btn--ghost {
+  background: transparent;
+  border-color: var(--hairline);
+  color: var(--heading);
+}
+.btn--ghost:hover { border-color: var(--blue-400); background: var(--pale-100); }
+
+.band--deep .btn--ghost,
+.hero .btn--ghost { border-color: rgb(255 255 255 / .45); color: var(--white); }
+.band--deep .btn--ghost:hover,
+.hero .btn--ghost:hover { background: rgb(255 255 255 / .12); border-color: var(--white); }
+
+/* The arrow slides on hover — the one micro-interaction every CTA shares. */
+.btn .ico--arrow { transition: transform var(--t-mid) var(--ease-spring); }
+.btn:hover .ico--arrow { transform: translateX(.48rem); }
+
+/* --------------------------------------------------------------------------
+   Reading progress — a hairline that fills as the page is read
+   -------------------------------------------------------------------------- */
+
+.progress {
+  position: fixed;
+  inset-block-start: 0;
+  inset-inline: 0;
+  block-size: 3px;
+  z-index: 200;
+  background: var(--fill-accent);
+  transform: scaleX(var(--p, 0));
+  transform-origin: left;
+  pointer-events: none;
+}
+
+/* --------------------------------------------------------------------------
+   Sticky call bar — phones only, and only once the hero has scrolled away.
+   Two halves: book and call. Off screen it is also out of the tab order:
+   visibility waits for the slide to finish on the way out and is restored
+   at once on the way in.
+   -------------------------------------------------------------------------- */
+
+.sticky-cta {
+  position: fixed;
+  inset-inline: 0;
+  inset-block-end: 0;
+  z-index: 150;
+  display: none;
+  grid-template-columns: 1fr 1fr;
+  box-shadow: 0 -4px 16px rgb(1 53 89 / .18);
+  transform: translateY(100%);
+  visibility: hidden;
+  transition: transform var(--t-mid) var(--ease), visibility 0s linear var(--t-mid);
+}
+.sticky-cta[data-shown="true"] { transform: none; visibility: visible; transition-delay: 0s; }
+.sticky-cta a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s-2);
+  min-block-size: 5.6rem;
+  padding-inline: var(--s-3);
+  font-size: var(--t-sm);
+  font-weight: 700;
+  color: var(--white);
+  text-align: center;
+}
+.sticky-cta a:active { opacity: .8; }
+.sticky-cta__book { background: var(--fill-action); }
+.sticky-cta__call { background: var(--ink-900); }
+.sticky-cta .ico { inline-size: 1.8rem; block-size: 1.8rem; }
+
+@media (max-width: 47.99rem) {
+  .sticky-cta { display: grid; }
+  body { padding-block-end: 5.6rem; }
+}
