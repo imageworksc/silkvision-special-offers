@@ -196,15 +196,15 @@
      is 17px, not 16, and the ladder is generous the whole way up. */
   /* --t-xs is for labels only — the hero's fact labels, the scroll cue,
      the table's group rows. Never for a sentence. */
-  --t-xs:    clamp(.8125rem, .1vw + .79rem, .875rem);    /* 13 → 14 */
+  --t-xs:    clamp(1.3rem, .1vw + 1.264rem, 1.4rem);    /* 13 → 14 */
   /* --t-sm carries real copy (card text, table cells, nav), so its floor is
      16px, not 15. */
-  --t-sm:    clamp(1rem, .15vw + .96rem, 1.0625rem);     /* 16 → 17 */
-  --t-body:  clamp(1.0625rem, .22vw + 1.01rem, 1.1875rem); /* 17 → 19 */
-  --t-lead:  clamp(1.0625rem, .5vw + .9625rem, 1.3125rem); /* 17 → 21 */
-  --t-h3:    clamp(1.3125rem, .7vw + 1.15rem, 1.625rem);  /* 21 → 26 */
-  --t-h2:    clamp(1.625rem, 2.4vw + 1.05rem, 2.625rem);  /* 26 → 42 */
-  --t-h1:    clamp(2rem, 3.8vw + .9rem, 3.875rem);        /* 32 → 62 */
+  --t-sm:    clamp(1.6rem, .15vw + 1.536rem, 1.7rem);     /* 16 → 17 */
+  --t-body:  clamp(1.7rem, .22vw + 1.616rem, 1.9rem); /* 17 → 19 */
+  --t-lead:  clamp(1.7rem, .5vw + 1.54rem, 2.1rem); /* 17 → 21 */
+  --t-h3:    clamp(2.1rem, .7vw + 1.84rem, 2.6rem);  /* 21 → 26 */
+  --t-h2:    clamp(2.6rem, 2.4vw + 1.68rem, 4.2rem);  /* 26 → 42 */
+  --t-h1:    clamp(3.2rem, 3.8vw + 1.44rem, 6.2rem);        /* 32 → 62 */
 
   --lh-tight: 1.06;
   --lh-head: 1.16;
@@ -213,13 +213,13 @@
   --ls-wide: .14em;
 
   /* ---------- Space ---------- */
-  --s-1: .25rem;  --s-2: .5rem;   --s-3: .75rem;  --s-4: 1rem;
-  --s-5: 1.5rem;  --s-6: 2rem;    --s-7: 2.5rem;  --s-8: 3rem;
-  --s-9: 4rem;    --s-10: 5rem;   --s-11: 7rem;
+  --s-1: .4rem;  --s-2: .8rem;   --s-3: 1.2rem;  --s-4: 1.6rem;
+  --s-5: 2.4rem;  --s-6: 3.2rem;    --s-7: 4rem;  --s-8: 4.8rem;
+  --s-9: 6.4rem;    --s-10: 8rem;   --s-11: 11.2rem;
 
-  --gutter: clamp(1.25rem, 4vw, 2.75rem);
-  --band-y: clamp(3.5rem, 8vw, 7rem);
-  --shell: 78rem;
+  --gutter: clamp(2rem, 4vw, 4.4rem);
+  --band-y: clamp(5.6rem, 8vw, 11.2rem);
+  --shell: 124.8rem;
   --measure: 62ch;
 
   /* ---------- Shape ----------
@@ -229,9 +229,9 @@
      focus ring together and they stay in proportion to each other.
 
      --r-xl was on the ladder and nothing used it. */
-  --r-sm: .375rem;   /*  6px — small wells, the focus ring, the skip link */
-  --r-md: .625rem;   /* 10px — buttons, icon wells, feature rows          */
-  --r-lg: .875rem;   /* 14px — cards, the comparison table's frame        */
+  --r-sm: .6rem;   /*  6px — small wells, the focus ring, the skip link */
+  --r-md: 1rem;   /* 10px — buttons, icon wells, feature rows          */
+  --r-lg: 1.4rem;   /* 14px — cards, the comparison table's frame        */
   --r-pill: 999px;   /*        circles only: the tick, the seal, the rule */
 
   /* ---------- Motion ---------- */
@@ -260,10 +260,20 @@ html {
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
   scroll-padding-top: var(--s-9);
+  /* Matches the Silk Vision site theme, which sets the same value, so the
+     page measures the same on staging and in Drupal: 1rem = 10px. Sizes in
+     this project are written on that base. Media queries ignore this and
+     stay on the browser's 16px, so they keep their usual values. */
+  font-size: 62.5%;
 }
 
-body {
-  margin: 0;
+body { margin: 0; }
+
+/* Drupal renders the page inside .field-html-code, and this file carries
+   the same wrapper. Everything element-level is scoped to it so these rules
+   never reach the site's own header and footer. :where() adds no
+   specificity, so component classes still win without !important. */
+.field-html-code {
   background: var(--white);
   color: var(--text);
   font-family: var(--font);
@@ -277,7 +287,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-h1, h2, h3, h4 {
+:where(.field-html-code) :is(h1, h2, h3, h4) {
   margin: 0;
   color: var(--heading);
   font-weight: 700;
@@ -286,18 +296,30 @@ h1, h2, h3, h4 {
   text-wrap: balance;
 }
 
-h1 { font-size: var(--t-h1); line-height: var(--lh-tight); font-weight: 800; }
-h2 { font-size: var(--t-h2); }
-h3 { font-size: var(--t-h3); }
+:where(.field-html-code) h1 { font-size: var(--t-h1); line-height: var(--lh-tight); font-weight: 800; }
+:where(.field-html-code) h2 { font-size: var(--t-h2); }
+:where(.field-html-code) h3 { font-size: var(--t-h3); }
 
-p { margin: 0; max-width: var(--measure); text-wrap: pretty; }
-ul, ol { margin: 0; padding: 0; list-style: none; }
-figure, blockquote { margin: 0; }
-img, svg, video { display: block; max-width: 100%; }
-a { color: var(--blue-500); text-decoration: none; }
-strong, b { font-weight: 700; }
+:where(.field-html-code) p { margin: 0; max-width: var(--measure); text-wrap: pretty; }
+:where(.field-html-code) :is(ul, ol) { margin: 0; padding: 0; list-style: none; }
+:where(.field-html-code) :is(figure, blockquote) { margin: 0; }
+:where(.field-html-code) :is(img, svg, video) { display: block; max-width: 100%; }
+:where(.field-html-code) a { color: var(--blue-500); text-decoration: none; }
+:where(.field-html-code) :is(strong, b) { font-weight: 700; }
 
 ::selection { background: var(--plum-400); color: var(--white); }
+
+/* The page wrapper. In Drupal the theme's floated main menu hangs 4px below
+   the header; without clear, .hero (overflow: hidden) narrows to dodge it.
+   Never name this id "main": the theme caps that id at 1000px. */
+#sv-main { clear: both; width: 100%; }
+
+/* The rest of the theme's reach, measured on the entropion page. Its 1023px
+   breakpoint forces img { height: auto !important }, which undoes the
+   cropped photos, and its 767px one spaces every list item 20px apart. */
+#sv-main :is(.frame, .offer-img, .evo-card__img) > img { height: 100% !important; }
+#sv-main.html-wrapper ul li { margin-bottom: 0; }
+#sv-main summary { padding-inline: 0; }
 
 /* The symbol sheet is referenced, never rendered. Out of flow so it cannot
    contribute a stray line box at the top of the document. */
@@ -317,7 +339,7 @@ strong, b { font-weight: 700; }
 .band { padding-block: var(--band-y); position: relative; }
 .band--paper { background: var(--paper); }
 /* A band that backs up a claim rather than making one: about half the air. */
-.band--slim { padding-block: clamp(2.5rem, 5vw, 4rem); }
+.band--slim { padding-block: clamp(4rem, 5vw, 6.4rem); }
 
 /* Dark context re-points the semantic colours and every child follows. The
    hero is on this list even though it brings its own background: without it
@@ -481,7 +503,7 @@ strong, b { font-weight: 700; }
   align-items: center;
   justify-content: center;
   gap: var(--s-3);
-  min-block-size: 3.5rem;
+  min-block-size: 5.6rem;
   min-inline-size: var(--tap);
   padding-inline: var(--s-7);
   border: 2px solid transparent;
@@ -504,7 +526,7 @@ strong, b { font-weight: 700; }
               border-color var(--t-fast) var(--ease),
               color var(--t-fast) var(--ease);
 }
-.btn--lg { min-block-size: 4rem; padding-inline: var(--s-8); font-size: var(--t-body); }
+.btn--lg { min-block-size: 6.4rem; padding-inline: var(--s-8); font-size: var(--t-body); }
 
 .btn:hover { transform: translateY(-3px); }
 .btn:active { transform: translateY(-1px); }
@@ -529,7 +551,7 @@ strong, b { font-weight: 700; }
 
 /* The arrow slides on hover — the one micro-interaction every CTA shares. */
 .btn .ico--arrow { transition: transform var(--t-mid) var(--ease-spring); }
-.btn:hover .ico--arrow { transform: translateX(.3rem); }
+.btn:hover .ico--arrow { transform: translateX(.48rem); }
 
 /* --------------------------------------------------------------------------
    Feature rows — an icon, a claim, a hairline
@@ -593,7 +615,7 @@ strong, b { font-weight: 700; }
   align-items: center;
   min-block-size: var(--tap);
 }
-.brand img { inline-size: 11.5rem; block-size: auto; transition: transform var(--t-mid) var(--ease); }
+.brand img { inline-size: 18.4rem; block-size: auto; transition: transform var(--t-mid) var(--ease); }
 .brand:hover img { transform: scale(1.03); }
 
 .nav { display: flex; align-items: center; gap: var(--s-5); }
@@ -610,7 +632,7 @@ strong, b { font-weight: 700; }
 .nav a:not(.btn)::after {
   content: '';
   position: absolute;
-  inset-block-end: .75rem;
+  inset-block-end: 1.2rem;
   inset-inline: 0;
   block-size: 2px;
   border-radius: var(--r-pill);
@@ -667,7 +689,7 @@ strong, b { font-weight: 700; }
   }
   .nav[data-open="true"] { display: flex; animation: drop var(--t-mid) var(--ease); }
   .nav a:not(.btn) { border-block-end: 1px solid var(--hairline); }
-  .nav a:not(.btn)::after { inset-block-end: .5rem; }
+  .nav a:not(.btn)::after { inset-block-end: .8rem; }
   .nav .btn { margin-block-start: var(--s-4); }
 }
 
@@ -741,8 +763,8 @@ strong, b { font-weight: 700; }
 .tick {
   display: inline-grid;
   place-items: center;
-  inline-size: 1.925rem;
-  block-size: 1.925rem;
+  inline-size: 3.08rem;
+  block-size: 3.08rem;
   border-radius: var(--r-pill);
   background: var(--fill-action);
   color: var(--white);
@@ -830,7 +852,7 @@ strong, b { font-weight: 700; }
   cursor: pointer;
   transition: background-color var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease);
 }
-.vid-btn .ico { inline-size: 1rem; block-size: 1rem; }
+.vid-btn .ico { inline-size: 1.6rem; block-size: 1.6rem; }
 .vid-btn:hover { background: var(--fill-action); border-color: var(--fill-action); }
 .vid-btn:active { opacity: .62; }
 .vid-btn .ico--play,
@@ -860,13 +882,13 @@ strong, b { font-weight: 700; }
 .play__disc {
   display: grid;
   place-items: center;
-  inline-size: 4.5rem;
-  block-size: 4.5rem;
+  inline-size: 7.2rem;
+  block-size: 7.2rem;
   border-radius: var(--r-pill);
   background: var(--fill-action);
   transition: transform var(--t-mid) var(--ease-spring);
 }
-.play__disc .ico { inline-size: 1.75rem; block-size: 1.75rem; fill: currentColor; translate: .1rem 0; }
+.play__disc .ico { inline-size: 2.8rem; block-size: 2.8rem; fill: currentColor; translate: .16rem 0; }
 .play:hover { background: rgb(1 34 58 / .5); }
 .play:hover .play__disc { transform: scale(1.08); }
 .play:active .play__disc { transform: none; }
@@ -941,7 +963,7 @@ strong, b { font-weight: 700; }
   box-shadow: 0 0 0 3px var(--white), var(--shadow-md);
   transition: transform var(--t-mid) var(--ease-spring);
 }
-.ba__knob .ico { inline-size: 1.25rem; block-size: 1.25rem; }
+.ba__knob .ico { inline-size: 2rem; block-size: 2rem; }
 
 .ba__range {
   position: absolute;
@@ -1027,7 +1049,7 @@ strong, b { font-weight: 700; }
   align-items: center;
   justify-content: center;
   gap: var(--s-2);
-  min-block-size: 3.5rem;
+  min-block-size: 5.6rem;
   padding-inline: var(--s-3);
   font-size: var(--t-sm);
   font-weight: 700;
@@ -1037,11 +1059,11 @@ strong, b { font-weight: 700; }
 .sticky-cta a:active { opacity: .8; }
 .sticky-cta__book { background: var(--fill-action); }
 .sticky-cta__call { background: var(--ink-900); }
-.sticky-cta .ico { inline-size: 1.125rem; block-size: 1.125rem; }
+.sticky-cta .ico { inline-size: 1.8rem; block-size: 1.8rem; }
 
 @media (max-width: 47.99rem) {
   .sticky-cta { display: grid; }
-  body { padding-block-end: 3.5rem; }
+  body { padding-block-end: 5.6rem; }
 }
 
 /* Off screen it is also out of the tab order: visibility waits for the
@@ -1099,9 +1121,9 @@ strong, b { font-weight: 700; }
   display: inline-grid;
   place-items: center;
   flex: none;
-  inline-size: 1.5rem;
-  block-size: 1.5rem;
-  margin-block-start: .05rem;
+  inline-size: 2.4rem;
+  block-size: 2.4rem;
+  margin-block-start: .08rem;
   border-radius: var(--r-pill);
   background: var(--plum-600);
   color: var(--white);
@@ -1165,7 +1187,7 @@ strong, b { font-weight: 700; }
      text-wrap: balance splits it evenly — "Ziplyft™ Eyelid Lift" over
      "in Northern Virginia". */
   max-width: 12em;
-  font-size: clamp(1.625rem, 2.4vw + .75rem, 2.75rem);   /* 26 → 44 */
+  font-size: clamp(2.6rem, 2.4vw + 1.2rem, 4.4rem);   /* 26 → 44 */
   font-weight: 700;
 }
 .hero .lead { color: var(--pale-200); max-width: none; }
@@ -1200,7 +1222,7 @@ strong, b { font-weight: 700; }
     padding-inline-start: var(--s-6);
   }
 }
-#main .facts-bar__area { max-width: 52ch; color: var(--text-soft); }
+#sv-main .facts-bar__area { max-width: 52ch; color: var(--text-soft); }
 
 /* The first band after a slim hero starts closer to it. */
 .band--open { padding-block-start: var(--s-8); }
@@ -1241,7 +1263,7 @@ strong, b { font-weight: 700; }
 
 .band--deep .feature p { color: var(--on-dark-soft); }
 /* The three marks drawn bare in white: no well behind them. */
-.steps3__ico { flex: none; inline-size: 1.75rem; block-size: 1.75rem; color: var(--white); stroke-width: 1.6; }
+.steps3__ico { flex: none; inline-size: 2.8rem; block-size: 2.8rem; color: var(--white); stroke-width: 1.6; }
 
 /* --------------------------------------------------------------------------
    Cost — the price the practice has yet to
@@ -1249,8 +1271,8 @@ strong, b { font-weight: 700; }
    -------------------------------------------------------------------------- */
 
 .price-slot {
-  flex: 1 1 22rem;
-  max-width: 40rem;
+  flex: 1 1 35.2rem;
+  max-width: 64rem;
   padding: var(--s-4) var(--s-5);
   border: 2px dashed var(--grey-300);
   border-radius: var(--r-md);
@@ -1262,13 +1284,13 @@ strong, b { font-weight: 700; }
    Video — the physician explains it himself
    -------------------------------------------------------------------------- */
 
-.video-media { inline-size: 100%; max-inline-size: 26rem; }
+.video-media { inline-size: 100%; max-inline-size: 41.6rem; }
 /* The video column is exactly the video's width and starts at the shell's
    left edge; the copy takes the rest. As an even split the video sat at the
    right of a half-width column, which left a gap on the left that no other
    section has. */
 @media (min-width: 60rem) {
-  .video-split { grid-template-columns: minmax(0, 26rem) minmax(0, 1fr); }
+  .video-split { grid-template-columns: minmax(0, 41.6rem) minmax(0, 1fr); }
 }
 
 /* --------------------------------------------------------------------------
@@ -1306,7 +1328,7 @@ strong, b { font-weight: 700; }
      rather than as one more band. */
   background: var(--ink-900);
   color: rgb(255 255 255 / .6);
-  font-size: .875rem;                /* 14px */
+  font-size: 1.4rem;                /* 14px */
   line-height: 1.6;
   --heading: var(--white);
   --hairline: rgb(255 255 255 / .1);
@@ -1321,7 +1343,7 @@ strong, b { font-weight: 700; }
 }
 @media (min-width: 60rem) {
   .footer-main {
-    grid-template-columns: minmax(10rem, .8fr) 3fr;
+    grid-template-columns: minmax(16rem, .8fr) 3fr;
     gap: var(--s-8);
   }
 }
@@ -1332,12 +1354,12 @@ strong, b { font-weight: 700; }
   align-items: flex-start;
   gap: var(--s-4);
 }
-.footer-brand img { inline-size: 9.5rem; block-size: auto; }
+.footer-brand img { inline-size: 15.2rem; block-size: auto; }
 
 .footer-offices {
   display: grid;
   gap: var(--s-6) var(--s-5);
-  grid-template-columns: repeat(auto-fit, minmax(min(9.5rem, 100%), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(15.2rem, 100%), 1fr));
 }
 @media (min-width: 60rem) and (max-width: 74.99rem) {
   .footer-offices { grid-template-columns: repeat(2, 1fr); }
@@ -1349,20 +1371,20 @@ strong, b { font-weight: 700; }
 /* A tracked label, not a heading with a rule under it. The border under
    every column was four horizontal lines fighting the four addresses. */
 .office h3 {
-  font-size: .6875rem;               /* 11px */
+  font-size: 1.1rem;               /* 11px */
   font-weight: 700;
   letter-spacing: .14em;
   text-transform: uppercase;
   color: rgb(255 255 255 / .42);
   margin-block-end: var(--s-2);
 }
-.office p { font-size: .875rem; color: rgb(255 255 255 / .78); }
+.office p { font-size: 1.4rem; color: rgb(255 255 255 / .78); }
 
 .office a:not(.btn) {
   display: inline-flex;
   align-items: center;
   min-block-size: var(--tap);        /* a standalone target, not a word in a sentence */
-  font-size: .8125rem;               /* 13px */
+  font-size: 1.3rem;               /* 13px */
   color: rgb(255 255 255 / .55);
   text-decoration: underline;
   text-underline-offset: 3px;
@@ -1383,12 +1405,12 @@ strong, b { font-weight: 700; }
   gap: var(--s-2);
   min-block-size: var(--tap);
   margin-block-start: var(--s-1);
-  font-size: .9375rem;               /* 15px */
+  font-size: 1.5rem;               /* 15px */
   font-weight: 600;
   color: var(--white);
   text-decoration: none;
 }
-.footer-phone .ico { inline-size: 1rem; block-size: 1rem; color: rgb(255 255 255 / .45); }
+.footer-phone .ico { inline-size: 1.6rem; block-size: 1.6rem; color: rgb(255 255 255 / .45); }
 
 /* The legal bar, centred. It is the one block on the page with no reading
    order to protect — a disclaimer, a copyright line and two links — so
@@ -1410,7 +1432,7 @@ strong, b { font-weight: 700; }
 .footer-disclaimer {
   max-width: 75ch;
   margin-inline: auto;
-  font-size: .75rem;                 /* 12px */
+  font-size: 1.2rem;                 /* 12px */
   line-height: 1.65;
   color: rgb(255 255 255 / .38);
   text-wrap: pretty;
@@ -1427,14 +1449,14 @@ strong, b { font-weight: 700; }
 }
 .footer-meta p {
   max-width: none;
-  font-size: .75rem;
+  font-size: 1.2rem;
   color: rgb(255 255 255 / .38);
 }
 .footer-meta a {
   display: inline-flex;
   align-items: center;
   min-block-size: var(--tap);
-  font-size: .75rem;
+  font-size: 1.2rem;
   color: rgb(255 255 255 / .5);
   text-decoration: underline;
   text-underline-offset: 3px;
@@ -1520,8 +1542,8 @@ strong, b { font-weight: 700; }
 }
 .yesno li + li { border-block-start: 1px solid var(--hairline); }
 .yesno__col--yes li { background: rgb(166 38 166 / .04); }
-.yesno .tick { flex: none; inline-size: 1.75rem; block-size: 1.75rem; }
-.yesno .tick .ico { inline-size: 1.1rem; block-size: 1.1rem; stroke-width: 2.4; }
+.yesno .tick { flex: none; inline-size: 2.8rem; block-size: 2.8rem; }
+.yesno .tick .ico { inline-size: 1.76rem; block-size: 1.76rem; stroke-width: 2.4; }
 /* No: a cross in a plain ring, in the navy of its column. */
 .yesno .tick--no {
   background: var(--white);
@@ -1534,8 +1556,8 @@ strong, b { font-weight: 700; }
   .yesno ul { grid-auto-rows: auto; }
   .yesno li { gap: var(--s-3); padding: var(--s-3) var(--s-4); align-items: flex-start; line-height: 1.45; }
   .yesno h3 { padding: var(--s-3) var(--s-4); }
-  .yesno .tick { inline-size: 1.375rem; block-size: 1.375rem; margin-block-start: .1rem; }
-  .yesno .tick .ico { inline-size: .875rem; block-size: .875rem; }
+  .yesno .tick { inline-size: 2.2rem; block-size: 2.2rem; margin-block-start: .16rem; }
+  .yesno .tick .ico { inline-size: 1.4rem; block-size: 1.4rem; }
 }
 
 /* --------------------------------------------------------------------------
@@ -1556,8 +1578,8 @@ strong, b { font-weight: 700; }
   border: 1px solid var(--hairline-dark);
 }
 .profile__photo {
-  inline-size: 8rem;
-  block-size: 8rem;
+  inline-size: 12.8rem;
+  block-size: 12.8rem;
   border-radius: var(--r-pill);
   object-fit: cover;
   box-shadow: 0 0 0 4px var(--white), 0 0 0 9px rgb(255 255 255 / .12);
@@ -1588,7 +1610,7 @@ strong, b { font-weight: 700; }
 
 @media (min-width: 48rem) {
   .profile { grid-template-columns: auto 1fr; align-items: center; column-gap: var(--s-6); padding: var(--s-6) var(--s-7); }
-  .profile__photo { inline-size: 9.5rem; block-size: 9.5rem; min-inline-size: 9.5rem; }
+  .profile__photo { inline-size: 15.2rem; block-size: 15.2rem; min-inline-size: 15.2rem; }
   .profile__stats { grid-column: 1 / -1; justify-self: stretch; flex-wrap: nowrap; gap: 0; padding-block-start: var(--s-5); border-block-start: 1px solid var(--hairline-dark); }
   .profile__stats dt { white-space: nowrap; }
   .profile__stats > div + div { margin-inline-start: var(--s-6); padding-inline-start: var(--s-6); border-inline-start: 1px solid var(--hairline-dark); }
@@ -1672,7 +1694,7 @@ strong, b { font-weight: 700; }
 
 #compare .tick { inline-size: auto; block-size: auto; background: transparent; color: var(--plum-600); }
 #compare .compare td:nth-of-type(2) .tick { background: transparent; color: var(--ink-700); }
-#compare .tick .ico { inline-size: 1.375rem; block-size: 1.375rem; stroke-width: 2.4; }
+#compare .tick .ico { inline-size: 2.2rem; block-size: 2.2rem; stroke-width: 2.4; }
 /* Phones: three columns squeezed to fit broke words in half. Each
    row stacks instead: its name across the top, the two answers side by
    side under the two names they belong to. */
@@ -1738,8 +1760,8 @@ strong, b { font-weight: 700; }
 }
 .fit__tick {
   flex: none;
-  inline-size: 1.25rem;
-  block-size: 1.25rem;
+  inline-size: 2rem;
+  block-size: 2rem;
   color: var(--plum-600);
   stroke-width: 2.2;
   transform: translateY(.2em);
@@ -1763,13 +1785,13 @@ strong, b { font-weight: 700; }
    -------------------------------------------------------------------------- */
 
 .bare {
-  inline-size: 2.25rem;
-  block-size: 2.25rem;
+  inline-size: 3.6rem;
+  block-size: 3.6rem;
   flex: none;
   color: var(--plum-600);
   stroke-width: 1.6;
 }
-.bare--lg { inline-size: 3rem; block-size: 3rem; stroke-width: 1.4; }
+.bare--lg { inline-size: 4.8rem; block-size: 4.8rem; stroke-width: 1.4; }
 .band--deep .bare { color: var(--cyan-300); }
 
 /* ==========================================================================
@@ -1929,7 +1951,7 @@ strong.hl {
 .stepper__panel {
   display: flex;
   align-items: center;
-  min-block-size: 4.5rem;   /* two lines; the band does not jump between steps */
+  min-block-size: 7.2rem;   /* two lines; the band does not jump between steps */
 }
 .stepper__panel p { max-width: 70ch; color: var(--on-dark-soft); }
 /* Script marks the inactive panels hidden; without it every panel shows. */
@@ -1955,7 +1977,7 @@ strong.hl {
 .stages li {
   position: relative;
   display: grid;
-  grid-template-columns: 2.5rem 1fr;
+  grid-template-columns: 4rem 1fr;
   column-gap: var(--s-4);
   align-items: start;
   align-content: start;
@@ -1966,8 +1988,8 @@ strong.hl {
   z-index: 1;
   display: grid;
   place-items: center;
-  inline-size: 2.5rem;
-  block-size: 2.5rem;
+  inline-size: 4rem;
+  block-size: 4rem;
   border-radius: var(--r-pill);
   box-shadow: inset 0 0 0 1.5px var(--hairline);
   background: var(--white);
@@ -1986,7 +2008,7 @@ strong.hl {
   letter-spacing: var(--ls-wide);
   text-transform: uppercase;
   color: rgb(0 88 148 / .6);
-  margin-block-start: .7rem;
+  margin-block-start: 1.12rem;
 }
 .stages p { color: var(--text-soft); }
 
@@ -2008,10 +2030,10 @@ strong.hl {
   .stages li + li::before {
     content: '';
     position: absolute;
-    inset-block-start: 1.25rem;
+    inset-block-start: 2rem;
     /* From the previous number's right edge to this one's left edge. */
-    inset-inline-start: calc(2.5rem - 100% - var(--s-6));
-    inline-size: calc(100% + var(--s-6) - 2.5rem);
+    inset-inline-start: calc(4rem - 100% - var(--s-6));
+    inline-size: calc(100% + var(--s-6) - 4rem);
     block-size: 1px;
     background: var(--hairline);
   }
@@ -2039,7 +2061,7 @@ strong.hl {
    -------------------------------------------------------------------------- */
 
 @media (min-width: 48rem) {
-  #main h2 {
+  #sv-main h2 {
     max-inline-size: calc((min(100vw, var(--shell)) - var(--gutter) * 2) * .6);
     text-wrap: balance;
   }
@@ -2080,7 +2102,7 @@ strong.hl {
 .carousel__dot {
   display: grid;
   place-items: center;
-  inline-size: 1.75rem;
+  inline-size: 2.8rem;
   block-size: var(--tap);
   padding: 0;
   border: 0;
@@ -2089,14 +2111,14 @@ strong.hl {
 }
 .carousel__dot::before {
   content: '';
-  inline-size: .5rem;
-  block-size: .5rem;
+  inline-size: .8rem;
+  block-size: .8rem;
   border-radius: var(--r-pill);
   background: rgb(1 53 89 / .2);
   transition: inline-size var(--t-mid) var(--ease), background-color var(--t-mid) var(--ease);
 }
 .carousel__dot:hover::before { background: rgb(106 0 106 / .4); }
-.carousel__dot[aria-current="true"]::before { inline-size: 1.5rem; background: var(--plum-600); }
+.carousel__dot[aria-current="true"]::before { inline-size: 2.4rem; background: var(--plum-600); }
 .carousel:not([data-ready]) .carousel__nav { display: none; }
 
 /* --------------------------------------------------------------------------
@@ -2126,7 +2148,7 @@ strong.hl {
    floating in a field of white. max() keeps a reader's own larger default. */
 
 @media (min-width: 120rem) {
-  html { font-size: max(100%, 100vw / 120); }
+  html { font-size: max(62.5%, 100vw / 192); }
   /* HERO_IMAGE — [PENDING: the same Cloudinary photo at c_limit,w_3600.] */
 }
 
@@ -2158,11 +2180,11 @@ strong.hl {
 /* On phones the shared 26px hero title fell under this page's 28px section
    titles; its floor goes to 34px so it always leads. Desktop is unchanged
    at the shared 44px. */
-#main .hero h1 { max-width: 17em; font-size: clamp(2.125rem, 2.4vw + .75rem, 2.75rem); }
+#sv-main .hero h1 { max-width: 17em; font-size: clamp(3.4rem, 2.4vw + 1.2rem, 4.4rem); }
 .hero .hero__lead { max-width: 56ch; }
 
 /* Offer titles: one step under the shared h2 so they hold two lines. */
-.offer h2 { font-size: clamp(1.75rem, 1.2vw + 1.1rem, 2.25rem); }   /* 28 → 36 */
+.offer h2 { font-size: clamp(2.8rem, 1.2vw + 1.76rem, 3.6rem); }   /* 28 → 36 */
 .offer .head { gap: var(--s-3); }
 .offer .prose p { color: var(--text-soft); }
 
@@ -2186,11 +2208,11 @@ strong.hl {
    EVO ICL — navy. Two columns: the story on the left, one tall image on the
    right running the offer's full height, so neither column ends early.
    -------------------------------------------------------------------------- */
-#main .offer--evo .subhead { color: var(--cyan-300); }
+#sv-main .offer--evo .subhead { color: var(--cyan-300); }
 /* Bold. Specific enough to outrank type.css, which loads later and resets
    every subhead to 400. */
-#main .offer--evo .head p.subhead,
-#main .offer--lasik .head p.subhead { font-weight: 600; }
+#sv-main .offer--evo .head p.subhead,
+#sv-main .offer--lasik .head p.subhead { font-weight: 600; }
 .offer--evo .prose p { color: var(--on-dark-soft); }
 
 .evo-layout {
@@ -2231,7 +2253,7 @@ strong.hl {
   .evo-card .btn { inline-size: 100%; padding-inline: var(--s-4); }
 }
 /* A larger floor on phones (24px, from 21) so it still reads as a title. */
-.band--deep .evo-card h3 { font-size: clamp(1.4625rem, .72vw + 1.08rem, 1.6875rem); color: var(--white); }
+.band--deep .evo-card h3 { font-size: clamp(2.34rem, .72vw + 1.728rem, 2.7rem); color: var(--white); }
 .evo-card p { color: var(--on-dark-soft); max-width: 68ch; }
 .evo-card__actions {
   display: flex;
@@ -2258,20 +2280,20 @@ strong.hl {
 }
 .link-arrow:hover { color: var(--white); text-decoration-color: currentColor; }
 .link-arrow .ico--arrow { display: inline-block; vertical-align: -.2em; margin-inline-start: var(--s-2); transition: transform var(--t-mid) var(--ease-spring); }
-.link-arrow:hover .ico--arrow { transform: translateX(.3rem); }
+.link-arrow:hover .ico--arrow { transform: translateX(.48rem); }
 
 /* The terms belong to the how-it-works card: fine print at its foot, at the
    floor size (16px) in a quieter tone than the answer above, with nothing
    in bold, so they read as the program's small print, not as more copy.
    Specific enough to outrank the body-copy size and the card's own
    paragraph colour. */
-#main .offer--evo .evo-card p.evo-terms {
+#sv-main .offer--evo .evo-card p.evo-terms {
   /* Two lines on desktop, ending near the answer's right edge above it:
      52rem is the narrowest width that still holds the terms to two lines. */
-  max-width: 52rem;
+  max-width: 83.2rem;
   /* Set apart from the actions above it as the card's small print. */
   margin-block-start: var(--s-6);
-  font-size: 1rem;
+  font-size: 1.6rem;
   line-height: 1.6;
   color: rgb(255 255 255 / .55);
 }
@@ -2283,13 +2305,13 @@ strong.hl {
 @media (min-width: 60rem) {
   .lasik-layout { grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); align-items: center; gap: var(--s-10); }
 }
-.lasik-body { gap: var(--s-5); max-width: 36rem; }
+.lasik-body { gap: var(--s-5); max-width: 57.6rem; }
 .lasik-body > p:not(.staging-flag) { color: var(--text-soft); }
 .lasik-body .btn { margin-block-start: var(--s-2); }
 
 /* Staging only: a plain line under the button, so the review flag cannot be
    mistaken for part of the design. Remove with the comment above it. */
-#main .staging-flag { font-size: var(--t-sm); color: var(--plum-600); }
+#sv-main .staging-flag { font-size: var(--t-sm); color: var(--plum-600); }
 
 .nowrap { white-space: nowrap; }
 
@@ -2302,14 +2324,14 @@ strong.hl {
 .reward-graphic {
   position: relative;
   margin: 0;
-  min-block-size: 18rem;
+  min-block-size: 28.8rem;
   container-type: inline-size;
 }
 /* Desktop: the graphic takes exactly the intro's height and the cards size
    from that height, so the pair always spans the H2's top to the last
    paragraph's last line, whatever the copy wraps to. */
 @media (min-width: 60rem) {
-  .reward-graphic { align-self: stretch; min-block-size: 17rem; }
+  .reward-graphic { align-self: stretch; min-block-size: 27.2rem; }
   .reward-graphic .gift { inline-size: auto; }
   .reward-graphic .gift--you    { block-size: 60%; }
   .reward-graphic .gift--friend { block-size: 72%; }
@@ -2339,7 +2361,7 @@ strong.hl {
   background: var(--ink-600);
   border: 1px solid rgb(255 255 255 / .14);
   color: var(--white);
-  box-shadow: 0 1rem 2rem rgb(0 19 37 / .3);
+  box-shadow: 0 1.6rem 3.2rem rgb(0 19 37 / .3);
 }
 .gift--friend {
   --rot: 3deg;
@@ -2349,10 +2371,10 @@ strong.hl {
   inline-size: 72%;
   background: var(--fill-blue);
   color: var(--ink-700);
-  box-shadow: 0 1.75rem 3.5rem rgb(0 19 37 / .5), 0 .25rem .75rem rgb(0 19 37 / .2);
+  box-shadow: 0 2.8rem 5.6rem rgb(0 19 37 / .5), 0 .4rem 1.2rem rgb(0 19 37 / .2);
 }
 
-#main .gift__amt {
+#sv-main .gift__amt {
   display: flex;
   align-items: flex-start;
   font-family: var(--font);
@@ -2364,17 +2386,17 @@ strong.hl {
 }
 /* The currency sign set small and high, as on printed card faces, so the
    figure carries the weight. */
-#main .gift__cur {
+#sv-main .gift__cur {
   font-size: .45em;
   font-weight: 600;
   line-height: 1;
   margin-block-start: .2em;
   margin-inline-end: .06em;
 }
-#main .gift__who {
+#sv-main .gift__who {
   font-family: var(--font);
   font-weight: 600;
-  font-size: max(1rem, 7cqi);
+  font-size: max(1.6rem, 7cqi);
   line-height: var(--lh-head);
 }
 .gift--you .gift__who { color: var(--pale-200); }
@@ -2389,7 +2411,7 @@ strong.hl {
 
 [data-anim="on"] .reward-graphic .gift {
   opacity: 0;
-  transform: translateY(1.5rem) rotate(0deg) scale(.97);
+  transform: translateY(2.4rem) rotate(0deg) scale(.97);
   filter: blur(6px);
   transition:
     opacity .9s var(--ease-lux),
@@ -2443,14 +2465,14 @@ strong.hl {
   display: grid;
   place-items: center;
   margin: 0;
-  min-block-size: 16rem;
+  min-block-size: 25.6rem;
   padding: var(--s-7) var(--s-5);
 }
 @media (min-width: 60rem) { .lasik-graphic { align-self: stretch; } }
 
 .lasik-card {
   position: relative;
-  inline-size: min(80%, 24rem);
+  inline-size: min(80%, 38.4rem);
   aspect-ratio: 1.586;
 }
 
@@ -2458,13 +2480,13 @@ strong.hl {
   --rot: -3deg;
   inset: 0;
   inline-size: auto;
-  padding: clamp(1.25rem, 2.4vw, 2rem);
+  padding: clamp(2rem, 2.4vw, 3.2rem);
   background: var(--ink-700);
   color: var(--white);
-  box-shadow: 0 1.75rem 3.5rem rgb(1 53 89 / .35), 0 .25rem .75rem rgb(1 53 89 / .18);
+  box-shadow: 0 2.8rem 5.6rem rgb(1 53 89 / .35), 0 .4rem 1.2rem rgb(1 53 89 / .18);
 }
-#main .gift--lasik .gift__amt { font-size: clamp(3rem, 5.5vw, 4.5rem); }
-#main .gift--lasik .gift__who { font-size: clamp(1rem, 1.5vw, 1.25rem); color: var(--gift-steel); }
+#sv-main .gift--lasik .gift__amt { font-size: clamp(4.8rem, 5.5vw, 7.2rem); }
+#sv-main .gift--lasik .gift__who { font-size: clamp(1.6rem, 1.5vw, 2rem); color: var(--gift-steel); }
 
 /* Ribbon and bow: quiet strokes, a muted silver-blue (the pale tint at
    low strength) so they read as a detail, not an accent. Round caps,
@@ -2492,17 +2514,17 @@ strong.hl {
    burst; never shown without animation. */
 .spark {
   position: absolute;
-  inline-size: .5rem;
-  block-size: 2.25rem;
-  border-radius: 1rem;
+  inline-size: .8rem;
+  block-size: 3.6rem;
+  border-radius: 1.6rem;
   background: var(--cyan-400);
   opacity: 0;
   pointer-events: none;
 }
-.spark--tl { inset-block-start: -1.75rem; inset-inline-start: -1.25rem; --a: -45deg; }
-.spark--tr { inset-block-start: -1.75rem; inset-inline-end: -1.25rem;   --a: 45deg; }
-.spark--bl { inset-block-end: -1.75rem;   inset-inline-start: -1.25rem; --a: -135deg; }
-.spark--br { inset-block-end: -1.75rem;   inset-inline-end: -1.25rem;   --a: 135deg; }
+.spark--tl { inset-block-start: -2.8rem; inset-inline-start: -2rem; --a: -45deg; }
+.spark--tr { inset-block-start: -2.8rem; inset-inline-end: -2rem;   --a: 45deg; }
+.spark--bl { inset-block-end: -2.8rem;   inset-inline-start: -2rem; --a: -135deg; }
+.spark--br { inset-block-end: -2.8rem;   inset-inline-end: -2rem;   --a: 135deg; }
 
 /* Entrance, once. */
 [data-anim="on"] .lasik-graphic .gift--lasik { opacity: 0; }
@@ -2524,7 +2546,7 @@ strong.hl {
 }
 
 @keyframes lasik-card {
-  0%   { opacity: 0; transform: translateY(2rem) scale(.96); filter: blur(6px); }
+  0%   { opacity: 0; transform: translateY(3.2rem) scale(.96); filter: blur(6px); }
   38%  { opacity: 1; transform: none; filter: none; }
   54%  { transform: rotate(-7deg) scale(1.03); }
   70%  { transform: rotate(2deg) scale(1); }
@@ -2534,10 +2556,10 @@ strong.hl {
 /* Each spark grows as a stroke, then shrinks to a dot as it travels out
    along its own diagonal, and fades. */
 @keyframes lasik-spark {
-  0%   { opacity: 0; transform: rotate(var(--a)) translateY(.5rem) scaleY(.2); }
-  30%  { opacity: 1; transform: rotate(var(--a)) translateY(-.25rem) scaleY(1); }
-  65%  { opacity: 1; transform: rotate(var(--a)) translateY(-1.75rem) scaleY(.22); }
-  100% { opacity: 0; transform: rotate(var(--a)) translateY(-2.75rem) scaleY(.22); }
+  0%   { opacity: 0; transform: rotate(var(--a)) translateY(.8rem) scaleY(.2); }
+  30%  { opacity: 1; transform: rotate(var(--a)) translateY(-.4rem) scaleY(1); }
+  65%  { opacity: 1; transform: rotate(var(--a)) translateY(-2.8rem) scaleY(.22); }
+  100% { opacity: 0; transform: rotate(var(--a)) translateY(-4.4rem) scaleY(.22); }
 }
 
 /* --------------------------------------------------------------------------
@@ -2546,11 +2568,11 @@ strong.hl {
    held to a reading measure; and there is one button, with the phone number
    as a quiet link beside it, so two heavy blocks never sit side by side.
    -------------------------------------------------------------------------- */
-#main .closing h2 {
+#sv-main .closing h2 {
   max-inline-size: none;
-  font-size: clamp(1.75rem, 1.2vw + 1.1rem, 2.25rem);
+  font-size: clamp(2.8rem, 1.2vw + 1.76rem, 3.6rem);
 }
-#main .closing .lead { max-width: 58ch; }
+#sv-main .closing .lead { max-width: 58ch; }
 .closing__actions {
   display: flex;
   flex-wrap: wrap;
@@ -2572,22 +2594,27 @@ strong.hl {
    there still zeroes it.
    -------------------------------------------------------------------------- */
 @keyframes hero-lux {
-  from { opacity: 0; transform: translateY(1rem); }
+  from { opacity: 0; transform: translateY(1.6rem); }
   to   { opacity: 1; transform: none; }
 }
-#main .hero [data-seq] {
+#sv-main .hero [data-seq] {
   animation: hero-lux 1.3s var(--ease-lux) backwards;
 }
-#main .hero [data-seq="0"] { animation-delay: .1s; }
-#main .hero [data-seq="1"] { animation-delay: .18s; }
-#main .hero [data-seq="2"] { animation-delay: .26s; }
+#sv-main .hero [data-seq="0"] { animation-delay: .1s; }
+#sv-main .hero [data-seq="1"] { animation-delay: .18s; }
+#sv-main .hero [data-seq="2"] { animation-delay: .26s; }
 
 /* Phones and tablets: the EVO reward cards a size smaller, so the pair reads
    as a graphic beside the copy rather than a second hero. */
 @media (max-width: 59.99rem) {
-  .reward-graphic { min-block-size: 13.5rem; max-inline-size: 26rem; }
+  .reward-graphic { min-block-size: 21.6rem; max-inline-size: 41.6rem; }
   .gift--you    { inline-size: 54%; }
   .gift--friend { inline-size: 64%; }
+}
+/* Tablets: the column is wider than the pair's 416px cap, so the pair is
+   centred in it rather than leaving the right half of the band empty. */
+@media (min-width: 30rem) and (max-width: 59.99rem) {
+  .reward-graphic { inline-size: 100%; margin-inline: auto; }
 }
 
 /* --------------------------------------------------------------------------
@@ -2607,7 +2634,7 @@ strong.hl {
   display: grid;
   place-items: center;
   margin: 0;
-  min-block-size: 12rem;
+  min-block-size: 19.2rem;
   aspect-ratio: 16 / 10;
   overflow: hidden;
   border-radius: var(--r-md);
@@ -2634,10 +2661,10 @@ strong.hl {
 .evo-card--bleed { padding: 0; overflow: hidden; grid-template-columns: minmax(0, 1fr); grid-template-areas: "img" "text" "terms"; }
 .evo-card--bleed .evo-card__img { border: 0; border-radius: 0; aspect-ratio: 16 / 10; min-block-size: 0; }
 .evo-card--bleed .evo-card__text { padding: var(--s-6) var(--s-4) 0; }
-#main .offer--evo .evo-card--bleed p.evo-terms { padding: 0 var(--s-4) var(--s-6); margin-block-start: var(--s-4); }
+#sv-main .offer--evo .evo-card--bleed p.evo-terms { padding: 0 var(--s-4) var(--s-6); margin-block-start: var(--s-4); }
 @media (min-width: 48rem) {
   .evo-card--bleed .evo-card__text { padding: var(--s-8) var(--s-8) 0; }
-  #main .offer--evo .evo-card--bleed p.evo-terms { padding: 0 var(--s-8) var(--s-8); }
+  #sv-main .offer--evo .evo-card--bleed p.evo-terms { padding: 0 var(--s-8) var(--s-8); }
 }
 @media (min-width: 60rem) {
   .evo-card--bleed {
@@ -2649,7 +2676,7 @@ strong.hl {
   }
   .evo-card--bleed .evo-card__img { aspect-ratio: auto; min-block-size: 100%; }
   .evo-card--bleed .evo-card__text { padding: var(--s-9) var(--s-9) 0; align-content: center; }
-  #main .offer--evo .evo-card--bleed p.evo-terms { padding: 0 var(--s-9) var(--s-9); margin-block-start: var(--s-6); }
+  #sv-main .offer--evo .evo-card--bleed p.evo-terms { padding: 0 var(--s-9) var(--s-9); margin-block-start: var(--s-6); }
 }
 
 /* Chosen layout (was Version C): as the full-bleed card, with the image
@@ -2678,6 +2705,15 @@ strong.hl {
      centre, rather than an arrow being pushed past the edge. */
   .evo-card .evo-card__actions .btn { justify-content: center; }
   .evo-card .evo-card__actions .btn .ico--arrow { display: none; }
+  /* The two labels are the page's longest. On the narrowest phones (320)
+     they do not fit one line, and the shared nowrap clipped both ends, so
+     here they may wrap to two balanced lines, padded off the button's
+     edges. From 375 up they still set on one line. */
+  .evo-card .evo-card__actions .btn {
+    white-space: normal;
+    text-align: center;
+    padding-block: var(--s-3);
+  }
 }
 
 </style>
@@ -2697,7 +2733,7 @@ strong.hl {
    measurements do not.
 
    Loaded after sections.css and before motion.css. The body rule is scoped
-   to #main so the footer keeps its own smaller reference scale.
+   to #sv-main so the footer keeps its own smaller reference scale.
    ========================================================================== */
 
 :root {
@@ -2709,7 +2745,7 @@ strong.hl {
   --ls-copy: -.01em;
 }
 
-body { font-family: var(--font-body); }
+.field-html-code { font-family: var(--font-body); }
 
 /* Titles and controls stay Poppins. */
 h1, h2, h3, h4,
@@ -2725,14 +2761,14 @@ h1, h2, h3, h4,
    The id in the selector is deliberate: component rules such as
    `.card p` and `.compare td` each set their own size, and this has to
    outrank all of them from one place rather than be restated in each. */
-#main :is(p, li, dd, td, tbody th, figcaption) {
+#sv-main :is(p, li, dd, td, tbody th, figcaption) {
   font-size: var(--t-copy);
   line-height: var(--lh-copy);
   letter-spacing: var(--ls-copy);
 }
 
 /* The profile card's two figures are display type, not copy. */
-#main .profile__stats dd {
+#sv-main .profile__stats dd {
   font-size: var(--t-h3);
   line-height: 1.1;
   letter-spacing: var(--ls-tight);
@@ -2754,8 +2790,8 @@ h1, h2, h3, h4,
 /* The video section's four facts: label and value at one size, halfway
    between the label's old 13–14px and the value's 17–19px — 16 → 16.5px,
    on the 16px floor. Weight and colour still tell them apart. */
-#main .facts :is(dt, dd) {
-  font-size: clamp(1rem, .15vw + .95rem, 1.03125rem);
+#sv-main .facts :is(dt, dd) {
+  font-size: clamp(1.6rem, .15vw + 1.52rem, 1.65rem);
   line-height: 1.5;
 }
 
@@ -2766,7 +2802,7 @@ h1, h2, h3, h4,
    Subtitles, small
    titles and controls:   Poppins 600
    Reading text:          Inter 400, and Inter 600 for what it highlights
-   The selector lists carry an id (#main, or #_ which matches nothing) so
+   The selector lists carry an id (#sv-main, or #_ which matches nothing) so
    they outrank every component rule that set its own weight. */
 
 :is(#_, h1, h2) { font-weight: 700; }
@@ -2776,14 +2812,14 @@ h1, h2, h3, h4,
     .stepper__num, .stages__num, .diagram__num, .profile__stats dd,
     .fit__lead) { font-weight: 600; }
 
-#main :is(p, li, dt, dd, td, tbody th, figcaption, .subhead, .stepper__title):not(.profile__stats dd) {
+#sv-main :is(p, li, dt, dd, td, tbody th, figcaption, .subhead, .stepper__title):not(.profile__stats dd) {
   font-weight: 400;
 }
 /* What reading text highlights: the marker phrases, and the values the
    page sets apart in colour — Ziplyft's column, the facts' answers. */
-#main :is(strong, b, .hl),
-#main .compare tbody td:nth-of-type(1),
-#main :is(.facts, .hero-facts) dd { font-weight: 600; }
+#sv-main :is(strong, b, .hl),
+#sv-main .compare tbody td:nth-of-type(1),
+#sv-main :is(.facts, .hero-facts) dd { font-weight: 600; }
 
 </style>
 <style>
@@ -2803,28 +2839,28 @@ h1, h2, h3, h4,
    the blurred state, so the finished frame is the element's normal one and
    the text can never be left soft. */
 @keyframes resolve {
-  from { opacity: 0; filter: blur(1.25rem); }
+  from { opacity: 0; filter: blur(2rem); }
   to   { opacity: 1; filter: blur(0); }
 }
 
 @keyframes rise {
-  from { opacity: 0; transform: translateY(1.25rem); }
+  from { opacity: 0; transform: translateY(2rem); }
   to   { opacity: 1; transform: none; }
 }
 
 @keyframes nudge {
   0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(.3rem); }
+  50%      { transform: translateY(.48rem); }
 }
 
 @keyframes drop {
-  from { opacity: 0; transform: translateY(-.5rem); }
+  from { opacity: 0; transform: translateY(-.8rem); }
   to   { opacity: 1; transform: none; }
 }
 
 @keyframes float {
   0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(-.4rem); }
+  50%      { transform: translateY(-.64rem); }
 }
 
 /* --------------------------------------------------------------------------
@@ -2854,7 +2890,7 @@ h1, h2, h3, h4,
 
 [data-anim="on"] [data-reveal] {
   opacity: 0;
-  transform: translateY(1.5rem);
+  transform: translateY(2.4rem);
   transition: opacity var(--t-slow) var(--ease),
               transform var(--t-slow) var(--ease);
   transition-delay: var(--d, 0ms);
@@ -2955,8 +2991,10 @@ h1, h2, h3, h4,
 
 </head>
 <body>
+<!-- Stands in for the Drupal field the page is rendered in. -->
+<div class="field-html-code">
 
-<a class="skip-link" href="#main">Skip to content</a>
+<a class="skip-link" href="#sv-main">Skip to content</a>
 <div class="progress" id="progress" aria-hidden="true"></div>
 
 <!-- ==========================================================================
@@ -2990,7 +3028,7 @@ h1, h2, h3, h4,
 <!-- ===== HEADER and FOOTER removed on this page at the owner's request:
      the page drops into the live site, which supplies its own. ========== -->
 
-<main id="main">
+<main id="sv-main" class="html-wrapper">
 
   <!-- ===== HERO — the shared photo hero: photograph, navy scrim, copy. ==== -->
   <section class="hero" aria-labelledby="hero-title">
@@ -3130,9 +3168,11 @@ h1, h2, h3, h4,
 
 
 <!-- Phones only: the hero's two actions, once it has scrolled away. -->
-<div class="sticky-cta" id="stickyCta" data-shown="false">
+<div class="sticky-cta html-wrapper" id="stickyCta" data-shown="false">
   <a class="sticky-cta__book" href="https://www.mypatientvisit.com/onlinescheduling/#/scheduler/schedule?practiceid=b46123f5-99ee-4f66-969c-fe650949c344">Book consultation</a>
   <a class="sticky-cta__call" href="tel:+17038769700"><svg class="ico" aria-hidden="true"><use href="#i-phone"/></svg>Call now</a>
+</div>
+
 </div>
 
 <script>
@@ -3458,7 +3498,7 @@ const setupAccordions = () => {
     d._anim = anim;
     if (open) {
       [...d.children].filter((el) => el !== summary).forEach((el) => el.animate(
-        [{ opacity: 0, transform: 'translateY(-.5rem)' }, { opacity: 1, transform: 'none' }],
+        [{ opacity: 0, transform: 'translateY(-.8rem)' }, { opacity: 1, transform: 'none' }],
         { duration: OPEN_MS - 80, delay: 80, easing: EASE, fill: 'backwards' }
       ));
     }
